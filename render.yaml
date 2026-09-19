@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fried0-news
+    name: clef-transcriber
     env: static
-    buildCommand: ""
-    staticPublishPath: .
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist

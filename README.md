@@ -1,25 +1,39 @@
-# Fried0
-First project
-A small, dependency-free news analysis page. It runs as a static site, so it needs no build command, server runtime, database, or API key.
+# Clef Transcriber
+
+Clef Transcriber is a simple React + Vite + TypeScript MVP for uploading sheet music images, previewing them locally, selecting source and target clefs, and preparing for future transcription work.
+
+This version intentionally does **not** perform music recognition, OCR, OMR, note detection, or clef conversion. The Transcribe button only displays `Transcription coming soon.` when an image is selected.
+
+## Install
+
+Requirements: Node.js 18 or newer.
+
+```bash
+npm install
+```
 
 ## Run locally
 
-Open `index.html` directly, or run:
-
 ```bash
-python3 -m http.server 4173
+npm run dev
 ```
 
-Then visit `http://localhost:4173`.
+Open the local URL shown by Vite. The upload system supports PNG, JPG, JPEG, and WEBP files up to 10 MB. Images are previewed with browser object URLs and are never uploaded.
+
+## Build
+
+```bash
+npm run build
+```
+
+The production files are generated in `dist/`.
 
 ## Deploy on Render free
 
-This repository includes `render.yaml`, so Render can detect the static-site configuration automatically when you create a Blueprint. You can also create a **Static Site** manually:
+The included `render.yaml` configures a Render Static Site:
 
-1. Create a new **Static Site** from this repository.
-2. Set **Build Command** to empty.
-3. Set **Publish Directory** to `.`.
-4. Deploy.
+- Build command: `npm install && npm run build`
+- Publish directory: `dist`
 
-The sample stories live in `app.js`. Fried0 answers questions from that local story set and links to each publication's article section. To make the feed live later, replace the local `stories` array with a small server-side RSS/API proxy; browser-only RSS requests are commonly blocked by CORS.
+Create a new Blueprint from this repository in Render, or create a Static Site manually with those same settings. No backend, database, or environment variables are needed for this MVP.
 

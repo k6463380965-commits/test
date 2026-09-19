@@ -3,53 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Fried0 is a calm, analytical brief for the stories shaping the world.">
-  <title>Fried0 | The signal behind the noise</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Clef Transcriber - convert your sheet music to the clef you need.">
+  <title>Clef Transcriber</title>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="Fried0 home"><span class="brand-mark">F</span><span>FRIED<span class="brand-zero">0</span></span></a>
-    <div class="topbar-meta"><span class="live-dot"></span><span>LIVE BRIEFING</span><span class="date" id="today"></span></div>
-  </header>
-
-  <main id="top">
-    <section class="hero section-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">YOUR PERSONAL NEWS ANALYST</p>
-        <h1>Meet <em>Fried0.</em><br>Stay ahead of the signal.</h1>
-        <p class="hero-intro">An analytical lens on the events moving markets, communities, and the world. Ask anything. Get the context behind the headline.</p>
-        <a class="text-link" href="#ask">Ask Fried0 <span>↘</span></a>
-      </div>
-      <div class="agent-card" id="ask">
-        <div class="agent-head"><div class="avatar">F<span>0</span></div><div><strong>Fried0</strong><small>ANALYST AGENT <i></i></small></div><span class="spark">✦</span></div>
-        <div class="chat-log" id="chatLog"><div class="message agent-message">What are you curious about today?</div></div>
-        <form class="ask-form" id="askForm"><input id="questionInput" type="text" placeholder="Ask about a story or topic..." autocomplete="off"><button aria-label="Send question">↗</button></form>
-        <div class="suggestions"><button data-question="What is the biggest story right now?">Biggest story?</button><button data-question="Explain the energy transition story">Explain energy</button></div>
-      </div>
-    </section>
-
-    <section class="section section-grid" id="summary">
-      <div class="section-label"><span>01</span><h2>Recent events<br><em>at a glance.</em></h2><p>Three stories worth your attention, distilled to their moving parts.</p></div>
-      <div class="summary-list" id="summaryList"></div>
-    </section>
-
-    <section class="section searches-section">
-      <div class="section-label"><span>02</span><h2>What people are<br><em>following.</em></h2><p>Signals from the collective search.</p></div>
-      <div class="search-grid"><button class="search-topic active" data-topic="Climate"><span>01</span><strong>Climate<br>adaptation</strong><small>+28% this week <b>↗</b></small></button><button class="search-topic" data-topic="AI"><span>02</span><strong>AI regulation<br>&amp; trust</strong><small>+19% this week <b>↗</b></small></button><button class="search-topic" data-topic="Markets"><span>03</span><strong>Global market<br>shifts</strong><small>+14% this week <b>↗</b></small></button></div>
-    </section>
-
-    <section class="section library-section" id="library">
-      <div class="library-heading"><div class="section-label"><span>03</span><h2>Find the full<br><em>story.</em></h2></div><div class="search-box"><span>⌕</span><input id="searchInput" placeholder="Search stories, topics, sources..." aria-label="Search stories"></div></div>
-      <div class="filter-row"><span id="resultCount">ALL STORIES</span><div><button class="filter active" data-filter="all">All</button><button class="filter" data-filter="Climate">Climate</button><button class="filter" data-filter="AI">Technology</button><button class="filter" data-filter="Markets">Markets</button></div></div>
-      <div class="article-grid" id="articleGrid"></div>
-    </section>
-  </main>
-
-  <footer><span class="brand">FRIED<span class="brand-zero">0</span></span><span>Independent context for a noisy world.</span><span>Built for the curious.</span></footer>
-  <script src="app.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
