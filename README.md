@@ -1,5 +1,5 @@
 # Fried0
-
+First project
 A small, dependency-free news analysis page. It runs as a static site, so it needs no build command, server runtime, database, or API key.
 
 ## Run locally
@@ -22,3 +22,4 @@ This repository includes `render.yaml`, so Render can detect the static-site con
 4. Deploy.
 
 The sample stories live in `app.js`. Fried0 answers questions from that local story set and links to each publication's article section. To make the feed live later, replace the local `stories` array with a small server-side RSS/API proxy; browser-only RSS requests are commonly blocked by CORS.
+
