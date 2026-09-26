@@ -1,8 +1,8 @@
 # Clef Transcriber
 
-Clef Transcriber is a simple React + Vite + TypeScript MVP for uploading sheet music images, previewing them locally, selecting source and target clefs, and preparing for future transcription work.
+Clef Transcriber is a React + Vite + TypeScript app for uploading sheet music images, selecting source and target clefs, and requesting a new score image from OpenAI Images (`gpt-image-1`).
 
-This version intentionally does **not** perform music recognition, OCR, OMR, note detection, or clef conversion. The Transcribe button only displays `Transcription coming soon.` when an image is selected.
+The image is sent to OpenAI through a server-side endpoint. Generative image models may alter notes or notation, so review generated scores before using them; exact musical transcription is not guaranteed. The API key is read only by the server and must never use a `VITE_` prefix.
 
 ## Install
 
@@ -18,7 +18,9 @@ npm install
 npm run dev
 ```
 
-Open the local URL shown by Vite. The upload system supports PNG, JPG, JPEG, and WEBP files up to 10 MB. Images are previewed with browser object URLs and are never uploaded.
+Set `OPENAI_API_KEY` in `.env.local` before starting the dev server. On Vercel, add `OPENAI_API_KEY` as a server-side environment variable in the project settings. The image is sent to OpenAI for generation.
+
+Open the local URL shown by Vite. The upload system supports PNG, JPG, JPEG, and WEBP images up to 10 MB.
 
 ## Build
 
@@ -32,5 +34,5 @@ The production files are generated in `dist/`.
 
 Import this repository into Vercel. The included `vercel.json` configures the Vite production build and routes requests to `index.html` for client-side navigation.
 
-Vercel installs dependencies from `package.json`; the build command is `npm run build` and the output directory is `dist`. No backend, database, or environment variables are needed for this MVP.
+Vercel installs dependencies from `package.json`; the build command is `npm run build` and the output directory is `dist`. Add `OPENAI_API_KEY` as a server-side Vercel environment variable to enable generation.
 
