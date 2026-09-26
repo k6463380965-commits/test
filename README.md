@@ -28,12 +28,9 @@ npm run build
 
 The production files are generated in `dist/`.
 
-## Deploy on Render free
+## Deploy on Vercel
 
-The included `render.yaml` configures a Render Static Site:
+Import this repository into Vercel. The included `vercel.json` configures the Vite production build and routes requests to `index.html` for client-side navigation.
 
-- Build command: `npm install && npm run build`
-- Publish directory: `dist`
-
-Create a new Blueprint from this repository in Render, or create a Static Site manually with those same settings. No backend, database, or environment variables are needed for this MVP.
+Vercel installs dependencies from `package.json`; the build command is `npm run build` and the output directory is `dist`. No backend, database, or environment variables are needed for this MVP.
 
