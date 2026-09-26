@@ -9,9 +9,13 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       {
-        name: 'local-gemini-transcription-api',
+        name: 'local-oemer-transcription-api',
         configureServer(server) {
-          const handler = createTranscriptionHandler(env.GEMINI_API_KEY);
+          const handler = createTranscriptionHandler(
+            env.OMR_SERVICE_URL || 'http://127.0.0.1:8001',
+            env.OMR_SERVICE_TOKEN || 'local-omr-secret',
+            mode !== 'production',
+          );
           server.middlewares.use('/api/transcribe', (request, response) => {
             void handler(request, response);
           });

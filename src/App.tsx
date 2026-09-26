@@ -50,9 +50,9 @@ async function prepareImageForGeneration(file: File) {
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [sourceClef, setSourceClef] = useState<Clef>(DEFAULT_SOURCE);
   const [targetClef, setTargetClef] = useState<Clef>(DEFAULT_TARGET);
+  const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [message, setMessage] = useState('');
   const [transcriptionUrl, setTranscriptionUrl] = useState<string | null>(null);
   const [noteCount, setNoteCount] = useState(0);
@@ -64,22 +64,11 @@ function App() {
     };
   }, [transcriptionUrl]);
 
-  useEffect(() => {
-    if (!file) {
-      setPreviewUrl(null);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [file]);
-
   const handleFileAccepted = (nextFile: File) => {
     setFile(nextFile);
+    setCroppedFile(null);
     setTranscriptionUrl(null);
-    setMessage('');
+    setMessage('Select one staff or system crop before transcribing.');
   };
 
   const handleTranscribe = async () => {
@@ -87,13 +76,17 @@ function App() {
       setMessage('Please upload an image first.');
       return;
     }
+    if (!croppedFile) {
+      setMessage('Crop one staff or system from the image first.');
+      return;
+    }
 
     setIsTranscribing(true);
-    setMessage('Reading notes and rhythms with Gemini...');
+    setMessage('Reading notes and rhythms with Oemer...');
     setTranscriptionUrl(null);
     try {
       const formData = new FormData();
-      formData.append('image', await prepareImageForGeneration(file));
+      formData.append('image', await prepareImageForGeneration(croppedFile));
       formData.append('sourceClef', sourceClef);
       formData.append('targetClef', targetClef);
       const response = await fetch('/api/transcribe', { method: 'POST', body: formData });
@@ -119,12 +112,14 @@ function App() {
 
   const removeImage = () => {
     setFile(null);
+    setCroppedFile(null);
     setTranscriptionUrl(null);
     setMessage('');
   };
 
   const resetAll = () => {
     setFile(null);
+    setCroppedFile(null);
     setSourceClef(DEFAULT_SOURCE);
     setTargetClef(DEFAULT_TARGET);
     setTranscriptionUrl(null);
@@ -151,8 +146,8 @@ function App() {
             {file && <button className="reset-button" type="button" onClick={resetAll}><RotateCcw size={15} aria-hidden="true" /> Start Over</button>}
           </div>
 
-          {previewUrl && file ? (
-            <ImagePreview file={file} previewUrl={previewUrl} onRemove={removeImage} />
+          {file ? (
+            <ImagePreview file={file} onRemove={removeImage} onCropChange={setCroppedFile} />
           ) : (
             <ImageUploader onFileAccepted={handleFileAccepted} onError={setMessage} />
           )}
@@ -170,14 +165,14 @@ function App() {
           </div>
 
           <div className="action-area">
-            <TranscribeButton onClick={handleTranscribe} isLoading={isTranscribing} disabled={!file} />
+            <TranscribeButton onClick={handleTranscribe} isLoading={isTranscribing} disabled={!file || !croppedFile} />
             <p className="status-message" role="status" aria-live="polite">{message}</p>
           </div>
           {transcriptionUrl && <TranscriptionResult imageUrl={transcriptionUrl} targetClef={targetClef} noteCount={noteCount} />}
         </section>
-        <p className="privacy-note"><Upload size={14} aria-hidden="true" /> Your image is sent to Google Gemini for music recognition.</p>
+        <p className="privacy-note"><Upload size={14} aria-hidden="true" /> Your cropped image is sent to your configured Oemer service.</p>
       </main>
-      <footer>Clef Transcriber <span>Google Gemini OMR · VexFlow engraving</span></footer>
+      <footer>Clef Transcriber <span>Oemer OMR · VexFlow engraving</span></footer>
     </div>
   );
 }
