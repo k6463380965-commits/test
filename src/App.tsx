@@ -6,6 +6,7 @@ import ImageUploader from './components/ImageUploader';
 import ClefSelector from './components/ClefSelector';
 import TranscribeButton from './components/TranscribeButton';
 import TranscriptionResult from './components/TranscriptionResult';
+import type { ScoreTranscription } from './transcription';
 import './transcription.css';
 
 const DEFAULT_SOURCE = 'treble';
@@ -54,6 +55,7 @@ function App() {
   const [targetClef, setTargetClef] = useState<Clef>(DEFAULT_TARGET);
   const [message, setMessage] = useState('');
   const [transcriptionUrl, setTranscriptionUrl] = useState<string | null>(null);
+  const [noteCount, setNoteCount] = useState(0);
   const [isTranscribing, setIsTranscribing] = useState(false);
 
   useEffect(() => {
@@ -87,7 +89,7 @@ function App() {
     }
 
     setIsTranscribing(true);
-    setMessage('Preparing the image and sending it to OpenAI...');
+    setMessage('Reading notes and rhythms with Gemini...');
     setTranscriptionUrl(null);
     try {
       const formData = new FormData();
@@ -97,13 +99,17 @@ function App() {
       const response = await fetch('/api/transcribe', { method: 'POST', body: formData });
       if (!response.ok) {
         const result = await response.json().catch(() => null) as { error?: string } | null;
-        throw new Error(result?.error || 'Image generation failed. Please try again.');
+        throw new Error(result?.error || 'Music recognition failed. Please try again.');
       }
 
-      const image = await response.blob();
-      if (!image.type.startsWith('image/')) throw new Error('The image model returned an invalid file.');
+      const score = await response.json() as ScoreTranscription;
+      const { renderTranscription } = await import('./transcription');
+      const image = await renderTranscription(score, targetClef);
+      const detectedNotes = score.measures.reduce((sum, measure) =>
+        sum + measure.notes.reduce((measureSum, note) => measureSum + (note.rest ? 0 : note.pitches.length), 0), 0);
       setTranscriptionUrl(URL.createObjectURL(image));
-      setMessage('AI-generated sheet created. Verify all notes and clefs before using it.');
+      setNoteCount(detectedNotes);
+      setMessage(`Recognized ${detectedNotes} notes. Check the result against your original.`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Transcription failed. Please try another image.');
     } finally {
@@ -167,11 +173,11 @@ function App() {
             <TranscribeButton onClick={handleTranscribe} isLoading={isTranscribing} disabled={!file} />
             <p className="status-message" role="status" aria-live="polite">{message}</p>
           </div>
-          {transcriptionUrl && <TranscriptionResult imageUrl={transcriptionUrl} targetClef={targetClef} />}
+          {transcriptionUrl && <TranscriptionResult imageUrl={transcriptionUrl} targetClef={targetClef} noteCount={noteCount} />}
         </section>
-        <p className="privacy-note"><Upload size={14} aria-hidden="true" /> Your image is sent to OpenAI to generate a new score image.</p>
+        <p className="privacy-note"><Upload size={14} aria-hidden="true" /> Your image is sent to Google Gemini for music recognition.</p>
       </main>
-      <footer>Clef Transcriber <span>OpenAI image generation</span></footer>
+      <footer>Clef Transcriber <span>Google Gemini OMR · VexFlow engraving</span></footer>
     </div>
   );
 }

@@ -3,9 +3,10 @@ import { Download } from 'lucide-react';
 type TranscriptionResultProps = {
   imageUrl: string;
   targetClef: string;
+  noteCount: number;
 };
 
-function TranscriptionResult({ imageUrl, targetClef }: TranscriptionResultProps) {
+function TranscriptionResult({ imageUrl, targetClef, noteCount }: TranscriptionResultProps) {
   return (
     <section className="transcription-result" aria-labelledby="result-title">
       <div className="result-heading">
@@ -21,7 +22,7 @@ function TranscriptionResult({ imageUrl, targetClef }: TranscriptionResultProps)
       <div className="result-image-frame">
         <img src={imageUrl} alt={`AI-generated sheet music with the requested ${targetClef} clef`} />
       </div>
-      <p className="result-caption">AI-generated notation · verify the clef and notes before use</p>
+      <p className="result-caption">Gemini identified {noteCount} notes · {targetClef} clef · verify the result against the source</p>
     </section>
   );
 }

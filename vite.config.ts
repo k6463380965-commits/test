@@ -9,9 +9,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       {
-        name: 'local-openai-transcription-api',
+        name: 'local-gemini-transcription-api',
         configureServer(server) {
-          const handler = createTranscriptionHandler(env.OPENAI_API_KEY);
+          const handler = createTranscriptionHandler(env.GEMINI_API_KEY);
           server.middlewares.use('/api/transcribe', (request, response) => {
             void handler(request, response);
           });
